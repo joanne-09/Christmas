@@ -117,7 +117,7 @@ const App: React.FC = () => {
                 ref={scrollIndicatorRef}
                 className="fixed bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-white/50 text-sm z-20"
               >
-                  Scroll Down ▼
+                Scroll Down ▼
               </div>
           )}
 

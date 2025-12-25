@@ -77,14 +77,17 @@ def get_warm_word():
 def get_warm_word_online():
     """
     Demonstrates how to fetch a wish from an online source.
-    Since there is no standard 'Christmas Wish API', this endpoint 
-    attempts to scrape a quote or falls back to the local list.
+    Attempts to fetch a quote from ZenQuotes API.
     """
     try:
-        response = requests.get("https://api.quotable.io/random?tags=happiness|love|inspirational", timeout=2)
+        # ZenQuotes API (Free tier)
+        # verify=False is used here to bypass potential local SSL certificate issues
+        response = requests.get("https://zenquotes.io/api/random", timeout=3, verify=False)
         if response.status_code == 200:
             data = response.json()
-            return {"word": f"{data['content']} - {data['author']}"}
+            if isinstance(data, list) and len(data) > 0:
+                quote = data[0]
+                return {"word": f"{quote['q']}"}
     except Exception as e:
         print(f"Online fetch failed: {e}")
     
