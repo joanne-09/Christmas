@@ -11,9 +11,11 @@
 
 ## Frontend Deployment
 
-## Running the Project Locally
+1. Create a Docker image for the frontend as `frontend/Dockerfile`.
+2. Create a workflow in `.github/workflows/frontend.yml` to build and deploy the frontend to GitHub Pages on every push to the `master` branch.
+3. Configure Github page in the workfow file.
 
-Run the entire stack using Docker Compose. This will build the images and start the services.
+## Production Mode
 
 1.  **Build and Start:**
     ```bash
