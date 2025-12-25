@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
+import { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import * as THREE from 'three';
 
 export interface ChristmasTreeHandle {
@@ -213,32 +213,9 @@ const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onA
         treeGroup.add(starLight);
     };
 
-    const createSnow = () => {
-        const snowGeo = new THREE.BufferGeometry();
-        const snowMat = new THREE.PointsMaterial({
-            color: 0xffffff,
-            size: 1.5,
-            transparent: true,
-            opacity: 0.6
-        });
-
-        const snowPoints = [];
-        for (let i = 0; i < 2000; i++) {
-            snowPoints.push(
-                (Math.random() - 0.5) * 1500,
-                Math.random() * 1000 - 200,
-                (Math.random() - 0.5) * 1500
-            );
-        }
-        snowGeo.setAttribute('position', new THREE.Float32BufferAttribute(snowPoints, 3));
-        const snow = new THREE.Points(snowGeo, snowMat);
-        scene.add(snow);
-    };
-
     // Initialize
     prepareTreeData();
     createStar();
-    createSnow();
 
     // Event Handlers
     const onWindowResize = () => {
