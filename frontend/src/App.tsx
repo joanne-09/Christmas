@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import ChristmasTree, { ChristmasTreeHandle } from './components/ChristmasTree';
 import MerryChristmas from './components/MerryChristmas';
+import Music from './components/Music';
 
 const App: React.FC = () => {
   const [showText, setShowText] = useState(false);
@@ -21,6 +22,7 @@ const App: React.FC = () => {
 
   return (
     <div className="relative w-full h-screen bg-[#050505] overflow-hidden font-sans">
+      <Music />
       <ChristmasTree ref={treeRef} onAnimationComplete={() => setShowText(true)} />
       {showText && <MerryChristmas onComplete={handleTextComplete} />}
       

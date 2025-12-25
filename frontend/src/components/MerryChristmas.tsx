@@ -28,8 +28,8 @@ const MerryChristmas: React.FC<MerryChristmasProps> = ({ onComplete }) => {
       className="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-10"
     >
       <h1 
-        className="text-7xl md:text-9xl text-[#ffd700] drop-shadow-[0_0_15px_rgba(255,215,0,0.6)] tracking-widest text-center select-none"
-        style={{ fontFamily: "'Great Vibes', cursive", minHeight: '1.2em' }}
+        className="text-7xl md:text-9xl py-4 bg-gradient-to-r from-[#8E6E26] via-[#F8E698] to-[#8E6E26] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-widest text-center select-none"
+        style={{ fontFamily: "'Great Vibes', cursive", minHeight: '1.5em', lineHeight: '1.5' }}
       >
         {displayedText}
       </h1>
