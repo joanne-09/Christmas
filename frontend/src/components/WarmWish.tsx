@@ -20,7 +20,7 @@ const WarmWish: React.FC = () => {
       {!warmWord ? (
         <button 
           onClick={fetchWarmWord}
-          className="pointer-events-auto px-8 py-4 text-xl bg-gradient-to-r from-red-600 to-red-800 text-white rounded-full hover:from-red-700 hover:to-red-900 transition-all duration-300 shadow-[0_0_20px_rgba(255,0,0,0.5)] hover:scale-105"
+          className="pointer-events-auto px-8 py-4 text-xl text-[#ffd700] bg-black/40 border border-[#ffd700]/40 rounded-full shadow-[0_0_15px_rgba(255,215,0,0.1)] backdrop-blur-sm transition-all duration-100 hover:bg-[#ffd700]/10 hover:border-[#ffd700] hover:shadow-[0_0_30px_rgba(255,215,0,0.4)] hover:scale-105 active:scale-95 tracking-widest"
         >
           Click for a Warm Christmas Wish
         </button>
@@ -30,7 +30,7 @@ const WarmWish: React.FC = () => {
             "{warmWord}"
           </p>
           <button 
-            onClick={() => setWarmWord(null)}
+            onClick={fetchWarmWord}
             className="mt-12 px-6 py-2 text-sm text-gray-400 hover:text-white transition-colors border border-gray-700 rounded-full hover:border-gray-500"
           >
             Get another wish
