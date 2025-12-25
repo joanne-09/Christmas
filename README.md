@@ -1,6 +1,17 @@
 # Merry Christmas Website
 
-## Running the Project
+## Overview
+
+## Backend Deployment
+
+1. Create a Docker image for the backend as `backend/Dockerfile`.
+2. Create a workflow in `.github/workflows/backend.yml` to build and push the Docker image to a container registry on every push to the `master` branch.
+3. Create a Render Web Service for the backend using the Docker image from the container registry.
+4. Set Render hook URL in Github and configure this variable in workflow file.
+
+## Frontend Deployment
+
+## Running the Project Locally
 
 Run the entire stack using Docker Compose. This will build the images and start the services.
 
@@ -18,33 +29,3 @@ Run the entire stack using Docker Compose. This will build the images and start 
     ```bash
     docker-compose down
     ```
-
-## Project Structure
-
--   **`frontend/`**: React application created with Vite.
-    -   Uses TypeScript for type safety.
-    -   Uses Tailwind CSS for styling.
-    -   Runs on port `5173`.
--   **`backend/`**: FastAPI application.
-    -   Provides REST API endpoints.
-    -   Runs on port `8000`.
--   **`docker-compose.yml`**: Orchestrates the multi-container application.
-
-## CI/CD Pipelines
-
-This project uses GitHub Actions for Continuous Integration. The workflows are defined in the `.github/workflows/` directory.
-
-### 1. Backend workflow (`backend.yml`)
--   **Trigger:** Pushes or Pull Requests to the `main` branch affecting the `backend/` folder.
--   **Jobs:**
-    -   Sets up Python 3.10.
-    -   Installs dependencies from `requirements.txt`.
-    -   Builds the Docker image to ensure the `Dockerfile` is valid.
-
-### 2. Frontend workflow (`frontend.yml`)
--   **Trigger:** Pushes or Pull Requests to the `main` branch affecting the `frontend/` folder.
--   **Jobs:**
-    -   Sets up Node.js 18.
-    -   Installs dependencies (`npm install`).
-    -   Runs the build script (`npm run build`) to check for compilation errors.
-    -   Builds the Docker image to ensure the `Dockerfile` is valid.
