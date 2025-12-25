@@ -1,55 +1,60 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 const Music: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  useEffect(() => {
-    const playAudio = async () => {
-      if (audioRef.current) {
-        try {
-          audioRef.current.volume = 0.3;
-          await audioRef.current.play();
-          setIsPlaying(true);
-        } catch (err) {
-          console.log("Autoplay prevented. Waiting for user interaction.");
-          setIsPlaying(false);
-        }
-      }
-    };
-
-    playAudio();
-    
-    // Also try to play on first interaction if not playing
-    const handleInteraction = () => {
-        if (audioRef.current && audioRef.current.paused) {
-            audioRef.current.play()
-                .then(() => setIsPlaying(true))
-                .catch(e => console.log("Still blocked", e));
-        }
-    };
-
-    document.addEventListener('click', handleInteraction, { once: true });
-    return () => document.removeEventListener('click', handleInteraction);
+  const tryPlay = useCallback(async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    try {
+      audio.volume = 0.3;
+      await audio.play();
+      setIsPlaying(true);
+    } catch (err) {
+      console.log("Autoplay prevented. Waiting for user interaction.");
+      setIsPlaying(false);
+    }
   }, []);
 
-  const togglePlay = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
+  useEffect(() => {
+    tryPlay();
+
+    // Retry on first user gesture (covers mobile + desktop)
+    const handler = () => {
+      const audio = audioRef.current;
+      if (audio && audio.paused) {
+        tryPlay();
       }
-      setIsPlaying(!isPlaying);
+    };
+
+    const interactionEvents: Array<keyof DocumentEventMap> = ['pointerdown', 'touchstart', 'keydown'];
+    interactionEvents.forEach((event) => document.addEventListener(event, handler, { once: true }));
+
+    return () => {
+      interactionEvents.forEach((event) => document.removeEventListener(event, handler));
+    };
+  }, [tryPlay]);
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (!audio.paused) {
+      audio.pause();
+      setIsPlaying(false);
+    } else {
+      tryPlay();
     }
   };
 
   return (
     <div className="absolute top-4 right-4 z-50">
-        <audio ref={audioRef} loop>
-            <source src="/mistletoe.mp3" type="audio/mpeg" />
+        <audio ref={audioRef} loop autoPlay preload="auto" playsInline>
+          <source src={`${import.meta.env.BASE_URL}mistletoe.mp3`} type="audio/mpeg" />
         </audio>
         <button 
+            onPointerDown={(e) => e.stopPropagation()}
             onClick={togglePlay}
             className="text-[#ffd700] hover:text-[#fff] transition-colors p-2 bg-black/20 rounded-full backdrop-blur-sm"
             title={isPlaying ? "Pause Music" : "Play Music"}

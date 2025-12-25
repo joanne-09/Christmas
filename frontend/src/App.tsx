@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import ChristmasTree, { ChristmasTreeHandle } from './components/ChristmasTree';
 import MerryChristmas from './components/MerryChristmas';
-import Music from './components/Music';
+import Music from './components/Music.tsx';
 
 const App: React.FC = () => {
   const [showText, setShowText] = useState(false);
