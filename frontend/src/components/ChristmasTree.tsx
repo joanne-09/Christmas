@@ -1,9 +1,25 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import * as THREE from 'three';
 
-const ChristmasTree: React.FC = () => {
+export interface ChristmasTreeHandle {
+    reset: () => void;
+}
+
+interface ChristmasTreeProps {
+    onAnimationComplete?: () => void;
+}
+
+const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onAnimationComplete }, ref) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const resetRef = useRef<() => void>(() => {});
+
+  useImperativeHandle(ref, () => ({
+    reset: () => {
+        if (resetRef.current) {
+            resetRef.current();
+        }
+    }
+  }));
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -277,6 +293,10 @@ const ChristmasTree: React.FC = () => {
             
             // TARGET RESET
             targetLookAt.y = 50; 
+            
+            if (onAnimationComplete) {
+                onAnimationComplete();
+            }
         }
 
         // Animate star pop-in
@@ -369,6 +389,6 @@ const ChristmasTree: React.FC = () => {
   }, []);
 
   return <div ref={mountRef} className="w-full h-full block" />;
-};
+});
 
 export default ChristmasTree;
