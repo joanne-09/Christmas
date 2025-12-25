@@ -35,10 +35,10 @@ const App: React.FC = () => {
           {showText && <MerryChristmas onComplete={handleTextComplete} />}
           
           {showReplay && (
-            <div className="absolute bottom-10 right-10 z-20">
+            <div className="absolute bottom-4 right-4 md:bottom-10 md:right-10 z-20">
               <button 
                 onClick={handleReplay}
-                className="px-6 py-2 bg-transparent text-[rgba(255,215,0,0.5)] border border-[rgba(255,215,0,0.3)] rounded-full hover:text-[#ffd700] hover:bg-[rgba(255,215,0,0.1)] hover:border-[#ffd700] transition-colors duration-300"
+                className="px-4 py-1 md:px-6 md:py-2 text-sm md:text-base bg-transparent text-[rgba(255,215,0,0.5)] border border-[rgba(255,215,0,0.3)] rounded-full hover:text-[#ffd700] hover:bg-[rgba(255,215,0,0.1)] hover:border-[#ffd700] transition-colors duration-300"
               >
                 Replay Animation
               </button>

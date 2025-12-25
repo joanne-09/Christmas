@@ -29,7 +29,14 @@ const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onA
     scene.background = new THREE.Color(0x020205);
     scene.fog = new THREE.FogExp2(0x020205, 0.001);
 
-    let zoom = 550;
+    const getInitialZoom = () => {
+        const width = window.innerWidth;
+        if (width < 480) return 900; // Mobile
+        if (width < 768) return 750; // Tablet
+        return 550; // Desktop
+    };
+
+    let zoom = getInitialZoom();
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 3000);
     camera.position.set(0, 0, zoom);
 
@@ -169,6 +176,7 @@ const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onA
         allBalls = rawBalls.map(b => b.mesh);
     };
 
+    // Create Star on top of the tree
     const createStar = () => {
         const starShape = new THREE.Shape();
         const outerRadius = 18;
@@ -240,6 +248,24 @@ const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onA
 
     const onMouseUp = () => { isDragging = false; };
 
+    const onTouchStart = (e: TouchEvent) => {
+        if (e.touches.length === 1) {
+            isDragging = true;
+            previousMouseX = e.touches[0].clientX;
+            previousMouseY = e.touches[0].clientY;
+        }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+        if (!isDragging || e.touches.length !== 1) return;
+        targetRotationY += (e.touches[0].clientX - previousMouseX) * 0.005;
+        targetRotationX += (e.touches[0].clientY - previousMouseY) * 0.005;
+        previousMouseX = e.touches[0].clientX;
+        previousMouseY = e.touches[0].clientY;
+    };
+
+    const onTouchEnd = () => { isDragging = false; };
+
     const onMouseWheel = (e: WheelEvent) => {
         zoom += e.deltaY * 0.5;
         zoom = Math.max(100, Math.min(1500, zoom));
@@ -260,7 +286,7 @@ const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onA
                 ballsShown++;
             }
             
-            // CAMERA FOLLOW
+            // Camera follow
             targetLookAt.y = (buildProgress * treeHeight) + treeBaseY;
         } else if (!animationComplete) {
             animationComplete = true;
@@ -268,7 +294,7 @@ const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onA
             treeStar.scale.set(0.1, 0.1, 0.1);
             starLight.intensity = 5;
             
-            // TARGET RESET
+            // Reset camera target
             targetLookAt.y = 50; 
             
             if (onAnimationComplete) {
@@ -321,6 +347,9 @@ const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onA
     window.addEventListener('mousemove', onMouseMove, false);
     window.addEventListener('mouseup', onMouseUp, false);
     window.addEventListener('wheel', onMouseWheel, { passive: false });
+    window.addEventListener('touchstart', onTouchStart, { passive: false });
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('touchend', onTouchEnd, false);
 
     // Expose reset function
     resetRef.current = () => {
@@ -347,6 +376,9 @@ const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onA
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('mouseup', onMouseUp);
         window.removeEventListener('wheel', onMouseWheel);
+        window.removeEventListener('touchstart', onTouchStart);
+        window.removeEventListener('touchmove', onTouchMove);
+        window.removeEventListener('touchend', onTouchEnd);
         
         if (mountRef.current && renderer.domElement) {
             mountRef.current.removeChild(renderer.domElement);
