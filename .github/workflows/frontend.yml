@@ -43,6 +43,8 @@ jobs:
       run: npm install
 
     - name: Build
+      env:
+        VITE_API_BASE_URL: ${{ secrets.RENDER_BACKEND_URL }}
       run: npm run build
     
     - name: Setup Pages

@@ -68,9 +68,6 @@ const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onA
     scene.add(treeGroup);
 
     // State variables
-    let isDragging = false;
-    let previousMouseX = 0;
-    let previousMouseY = 0;
     let rotationX = 0.2;
     let rotationY = 0;
     let targetRotationX = 0.2;
@@ -232,46 +229,6 @@ const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onA
         renderer.setSize(window.innerWidth, window.innerHeight);
     };
 
-    const onMouseDown = (e: MouseEvent) => {
-        isDragging = true;
-        previousMouseX = e.clientX;
-        previousMouseY = e.clientY;
-    };
-
-    const onMouseMove = (e: MouseEvent) => {
-        if (!isDragging) return;
-        targetRotationY += (e.clientX - previousMouseX) * 0.005;
-        targetRotationX += (e.clientY - previousMouseY) * 0.005;
-        previousMouseX = e.clientX;
-        previousMouseY = e.clientY;
-    };
-
-    const onMouseUp = () => { isDragging = false; };
-
-    const onTouchStart = (e: TouchEvent) => {
-        if (e.touches.length === 1) {
-            isDragging = true;
-            previousMouseX = e.touches[0].clientX;
-            previousMouseY = e.touches[0].clientY;
-        }
-    };
-
-    const onTouchMove = (e: TouchEvent) => {
-        if (!isDragging || e.touches.length !== 1) return;
-        targetRotationY += (e.touches[0].clientX - previousMouseX) * 0.005;
-        targetRotationX += (e.touches[0].clientY - previousMouseY) * 0.005;
-        previousMouseX = e.touches[0].clientX;
-        previousMouseY = e.touches[0].clientY;
-    };
-
-    const onTouchEnd = () => { isDragging = false; };
-
-    const onMouseWheel = (e: WheelEvent) => {
-        zoom += e.deltaY * 0.5;
-        zoom = Math.max(100, Math.min(1500, zoom));
-        e.preventDefault();
-    };
-
     // Animation Loop
     let animationId: number;
     const animate = () => {
@@ -326,7 +283,7 @@ const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onA
         treeGroup.rotation.x = rotationX;
         treeGroup.rotation.y = rotationY;
 
-        if (!isDragging) targetRotationY += 0.005;
+        targetRotationY += 0.005;
 
         // Smooth zoom & Position
         camera.position.z += (zoom - camera.position.z) * 0.05;
@@ -343,13 +300,6 @@ const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onA
 
     // Listeners
     window.addEventListener('resize', onWindowResize, false);
-    window.addEventListener('mousedown', onMouseDown, false);
-    window.addEventListener('mousemove', onMouseMove, false);
-    window.addEventListener('mouseup', onMouseUp, false);
-    window.addEventListener('wheel', onMouseWheel, { passive: false });
-    window.addEventListener('touchstart', onTouchStart, { passive: false });
-    window.addEventListener('touchmove', onTouchMove, { passive: false });
-    window.addEventListener('touchend', onTouchEnd, false);
 
     // Expose reset function
     resetRef.current = () => {
@@ -372,13 +322,6 @@ const ChristmasTree = forwardRef<ChristmasTreeHandle, ChristmasTreeProps>(({ onA
     return () => {
         cancelAnimationFrame(animationId);
         window.removeEventListener('resize', onWindowResize);
-        window.removeEventListener('mousedown', onMouseDown);
-        window.removeEventListener('mousemove', onMouseMove);
-        window.removeEventListener('mouseup', onMouseUp);
-        window.removeEventListener('wheel', onMouseWheel);
-        window.removeEventListener('touchstart', onTouchStart);
-        window.removeEventListener('touchmove', onTouchMove);
-        window.removeEventListener('touchend', onTouchEnd);
         
         if (mountRef.current && renderer.domElement) {
             mountRef.current.removeChild(renderer.domElement);
