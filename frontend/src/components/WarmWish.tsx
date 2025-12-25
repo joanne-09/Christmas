@@ -16,16 +16,16 @@ const WarmWish: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-screen flex flex-col items-center justify-center bg-[#050505] text-white relative z-30">
+    <div className="w-full h-screen flex flex-col items-center justify-start pt-[55vh] bg-transparent text-white relative z-30 pointer-events-none">
       {!warmWord ? (
         <button 
           onClick={fetchWarmWord}
-          className="px-8 py-4 text-xl bg-gradient-to-r from-red-600 to-red-800 text-white rounded-full hover:from-red-700 hover:to-red-900 transition-all duration-300 shadow-[0_0_20px_rgba(255,0,0,0.5)] hover:scale-105"
+          className="pointer-events-auto px-8 py-4 text-xl bg-gradient-to-r from-red-600 to-red-800 text-white rounded-full hover:from-red-700 hover:to-red-900 transition-all duration-300 shadow-[0_0_20px_rgba(255,0,0,0.5)] hover:scale-105"
         >
           Click for a Warm Christmas Wish
         </button>
       ) : (
-        <div className="text-center p-8 animate-fade-in max-w-2xl mx-auto">
+        <div className="flex flex-col items-center text-center px-8 pb-8 animate-fade-in max-w-2xl mx-auto pointer-events-auto">
           <p className="text-3xl md:text-5xl font-serif text-[#ffd700] leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
             "{warmWord}"
           </p>

@@ -49,7 +49,7 @@ const Music: React.FC = () => {
   };
 
   return (
-    <div className="absolute top-4 right-4 z-50">
+    <div className="fixed top-4 right-4 z-50">
         <audio ref={audioRef} loop autoPlay preload="auto" playsInline>
           <source src={`${import.meta.env.BASE_URL}mistletoe.mp3`} type="audio/mpeg" />
         </audio>
